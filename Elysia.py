@@ -45,15 +45,15 @@ def get_today_schedule() -> str:
 
     schedules = {
 
-        0: "Senin: Struktur Data (08:00 - 10:00), Basis Data (10:00 - 12:00)", # Senin
+        0: "Senin: Agama (08:50 - 10:30) Matematika 1 (13:50 - 15:30)", # Senin
 
-        1: "Selasa: Pemrograman Web (09:00 - 11:00), Jaringan Komputer (13:00 - 15:00)", # Selasa
+        1: "Selasa: Workshop Teknologi Web dan Aplikasi (13:50 - 16:20)", # Selasa
 
-        2: "Rabu: Kecerdasan Buatan (08:00 - 10:00), Interaksi Manusia Komputer (10:00 - 12:00)", # Rabu
+        2: "Rabu: Arsitektur Komputer (08:00 - 09:40), Sistem Komunikasi (09:40 - 11:20), Praktikum Algoritmma dan Struktur Data (11:20 - 13:50), Elektronika Digital 1 (14:40 - 16:20)", # Rabu
 
-        3: "Kamis: Keamanan Informasi (13:00 - 15:00), Algoritma (15:00 - 17:00)", # Kamis
+        3: "Kamis: Algoritma dan Struktur Data (13:00 - 14:40), Praktikum Elektronika Digital 1 (14:40 - 16:20)", # Kamis
 
-        4: "Jumat: Proyek Akhir (09:00 - 12:00)", # Jumat
+        4: "Jumat: Praktikum Arsitektur Komputer (08:00 - 09:40), Praktikum Sistem Komunikasi (09:40 - 11:20)", # Jumat
 
         # 5 (Sabtu) dan 6 (Minggu) tidak ada dalam dictionary karena kosong/free
 
