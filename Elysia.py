@@ -45,15 +45,15 @@ def get_today_schedule() -> str:
 
     schedules = {
 
-        0: "Senin: Agama (08:50 - 10:30) Matematika 1 (13:50 - 15:30)", # Senin
+        0: "Senin: \n• Agama (08:50 - 10:30) \n Mohammad Ridwan (Dosen LB) - A 301 \n• Matematika 1 \n Rini Satiti - A 302 (13:50 - 15:30)", # Senin
 
-        1: "Selasa: Workshop Teknologi Web dan Aplikasi (13:50 - 16:20)", # Selasa
+        1: "Selasa: \n• Workshop Teknologi Web dan Aplikasi (13:50 - 16:20) \n Ahmad Zainudin - SAW-04.06", # Selasa
 
-        2: "Rabu: Arsitektur Komputer (08:00 - 09:40), Sistem Komunikasi (09:40 - 11:20), Praktikum Algoritmma dan Struktur Data (11:20 - 13:50), Elektronika Digital 1 (14:40 - 16:20)", # Rabu
+        2: "Rabu: \n• Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - B 203 \n• Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - A 302 \n• Praktikum Algoritmma dan Struktur Data (11:20 - 13:50) \n Mike Yuliana - SAW-04.06 \n• Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - B 304", # Rabu
 
-        3: "Kamis: Algoritma dan Struktur Data (13:00 - 14:40), Praktikum Elektronika Digital 1 (14:40 - 16:20)", # Kamis
+        3: "Kamis: \n• Algoritma dan Struktur Data (13:00 - 14:40) \n Mike Yuliana - B 204 \n• Praktikum Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - JJ-303", # Kamis
 
-        4: "Jumat: Praktikum Arsitektur Komputer (08:00 - 09:40), Praktikum Sistem Komunikasi (09:40 - 11:20)", # Jumat
+        4: "Jumat: \n• Praktikum Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - SAW-03.08 \n• Praktikum Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - SAW-03.08", # Jumat
 
         # 5 (Sabtu) dan 6 (Minggu) tidak ada dalam dictionary karena kosong/free
 
