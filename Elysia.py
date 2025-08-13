@@ -6,13 +6,10 @@ from dotenv import load_dotenv
 import re # Import modul regex
 import datetime # Import modul datetime untuk tanggal dan waktu
 
-
-
 # Load environment variables from .env file
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-# Amankan BOT_USERNAME dengan mengambilnya dari .env juga, bukan hardcode
-BOT_USERNAME = os.getenv("BOT_USERNAME") # Tambahkan ini ke .env Anda: BOT_USERNAME="@MyElysia_Bot"
+BOT_USERNAME = os.getenv("BOT_USERNAME")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # --- Validasi API Keys ---
@@ -29,67 +26,67 @@ client = openai.OpenAI(
     api_key=OPENROUTER_API_KEY,
 )
 
-# --- FUNGSI BARU: Mendapatkan Jadwal Mata Kuliah ---
-
-def get_today_schedule() -> str:
-
-    today = datetime.date.today()
-
-    day_of_week = today.weekday() # Monday is 0, Sunday is 6
-
-
-
-    # Contoh jadwal mata kuliah Anda
-
-    # Anda bisa menyimpan ini di database, file JSON, atau di sini langsung
-
-    schedules = {
-
-        0: "Senin: \n• Agama (08:50 - 10:30) \n Mohammad Ridwan (Dosen LB) - A 301 \n• Matematika 1 \n Rini Satiti - A 302 (13:50 - 15:30)", # Senin
-
-        1: "Selasa: \n• Workshop Teknologi Web dan Aplikasi (13:50 - 16:20) \n Ahmad Zainudin - SAW-04.06", # Selasa
-
-        2: "Rabu: \n• Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - B 203 \n• Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - A 302 \n• Praktikum Algoritmma dan Struktur Data (11:20 - 13:50) \n Mike Yuliana - SAW-04.06 \n• Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - B 304", # Rabu
-
-        3: "Kamis: \n• Algoritma dan Struktur Data (13:00 - 14:40) \n Mike Yuliana - B 204 \n• Praktikum Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - JJ-303", # Kamis
-
-        4: "Jumat: \n• Praktikum Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - SAW-03.08 \n• Praktikum Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - SAW-03.08", # Jumat
-
-        # 5 (Sabtu) dan 6 (Minggu) tidak ada dalam dictionary karena kosong/free
-
+# --- FUNGSI BARU/MODIFIKASI: Mendapatkan Jadwal Mata Kuliah ---
+def get_schedule(day_name: str = None) -> str:
+    # Mapping nama hari ke angka (Monday is 0, Sunday is 6)
+    day_mapping = {
+        "senin": 0, "monday": 0,
+        "selasa": 1, "tuesday": 1,
+        "rabu": 2, "wednesday": 2,
+        "kamis": 3, "thursday": 3,
+        "jumat": 4, "friday": 4,
+        "sabtu": 5, "saturday": 5,
+        "minggu": 6, "sunday": 6
     }
 
+    selected_day_index = None
+    selected_day_name_display = ""
 
+    if day_name:
+        normalized_day_name = day_name.lower()
+        if normalized_day_name in day_mapping:
+            selected_day_index = day_mapping[normalized_day_name]
+            selected_day_name_display = normalized_day_name.capitalize()
+        else:
+            return "Oh, Darling! I don't quite recognize that day. Could you spell it out for me, perhaps? Like 'Monday' or 'Selasa'?"
 
-    if day_of_week in [5, 6]: # Sabtu (5) atau Minggu (6)
+    if selected_day_index is None: # Jika tidak ada day_name yang diberikan, gunakan hari ini
+        today = datetime.date.today()
+        selected_day_index = today.weekday()
+        selected_day_name_display = today.strftime('%A') # Full weekday name (e.g., "Wednesday")
 
-        return "You're absolutely free today, darling! Enjoy your lovely weekend! 🥰"
+    # Contoh jadwal mata kuliah Anda
+    schedules = {
+        0: "Senin: \n• Agama (08:50 - 10:30) \n Mohammad Ridwan (Dosen LB) - A 301 \n• Matematika 1 (13:50 - 15:30) \n Rini Satiti - A 302 ", # Senin
+        1: "Selasa: \n• Workshop Teknologi Web dan Aplikasi (13:50 - 16:20) \n Ahmad Zainudin - SAW-04.06", # Selasa
+        2: "Rabu: \n• Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - B 203 \n• Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - A 302 \n• Praktikum Algoritmma dan Struktur Data (11:20 - 13:50) \n Mike Yuliana - SAW-04.06 \n• Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - B 304", # Rabu
+        3: "Kamis: \n• Algoritma dan Struktur Data (13:00 - 14:40) \n Mike Yuliana - B 204 \n• Praktikum Elektronika Digital 1 (14:40 - 16:20) \n Faridatun Nadziroh - JJ-303", # Kamis
+        4: "Jumat: \n• Praktikum Arsitektur Komputer (08:00 - 09:40) \n Haryadi Amran Darwito - SAW-03.08 \n• Praktikum Sistem Komunikasi (09:40 - 11:20) \n Aries Pratiarso - SAW-03.08", # Jumat
+        # 5 (Sabtu) dan 6 (Minggu) tidak ada dalam dictionary karena kosong/free
+    }
 
-    elif day_of_week in schedules:
-
-        return f"Oh, Darling! Your schedule for today ({today.strftime('%A')}) looks like this:\n\n{schedules[day_of_week]}\n\nHave a splendid day of learning! ✨"
-
+    if selected_day_index in [5, 6]: # Sabtu (5) atau Minggu (6)
+        return f"You're absolutely free on {selected_day_name_display}, darling! Enjoy your lovely {'weekend' if selected_day_index in [5,6] else 'day'}! 🥰"
+    elif selected_day_index in schedules:
+        return f"Oh, Darling! Your schedule for {selected_day_name_display} looks like this:\n\n{schedules[selected_day_index]}\n\nHave a splendid day of learning! ✨"
     else:
-
         # Ini akan menangani hari-hari kerja yang tidak ada dalam 'schedules'
+        return f"You're absolutely free on {selected_day_name_display}, darling! No classes for you. Enjoy! 🥰"
 
-        return "You're absolutely free today, darling! No classes for you. Enjoy! 🥰"
-
-
-
-# --- FUNGSI BARU: Command Handler untuk Jadwal ---
-
+# --- FUNGSI BARU/MODIFIKASI: Command Handler untuk Jadwal ---
 async def jadwal_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-
-    schedule_message = get_today_schedule()
+    if context.args:
+        # Jika ada argumen (misalnya, /jadwal senin)
+        day_name = context.args[0] # Ambil argumen pertama
+        schedule_message = get_schedule(day_name)
+    else:
+        # Jika tidak ada argumen (misalnya, /jadwal)
+        schedule_message = get_schedule() # Akan menampilkan jadwal hari ini
 
     await update.message.reply_text(schedule_message)
 
-
-
 # --- Fungsi Handler Bot Telegram Anda (Tidak ada perubahan signifikan di sini) ---
 
-# --- Fungsi Handler Bot Telegram Anda ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
         "🌸 Hello, Darling! I am Elysia, your enchanting AI companion. How can I brighten your day with a touch of magic?"
@@ -101,6 +98,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "/start - Begin our journey together\n"
         "/help - Get help and explore my features\n"
         "/about - Learn more about me, Elysia!\n"
+        "/jadwal [day] - Check your lovely class schedule for today or a specific day! (e.g., /jadwal Monday)\n" # Perbarui ini!
         "Just send me a message, and I'll do my best to charm you with my responses!"
     )
 
@@ -150,11 +148,6 @@ async def get_llm_response(prompt: str) -> str:
         response_content = completion.choices[0].message.content
         
         # --- PERBAIKAN UNTUK MENGHILANGKAN TAG ---
-        # 1. Coba beritahu model untuk tidak menyertakan tag di system prompt (sudah ditambahkan di atas)
-        # 2. Hapus tag secara manual jika model tetap mengembalikannya
-        
-        # Menggunakan regex untuk menghapus tag <answer> dan </answer>
-        # re.sub() akan mengganti semua kemunculan pola dengan string kosong
         cleaned_response = re.sub(r'<\/?answer>', '', response_content)
         
         # Memastikan respons tidak kosong setelah penghapusan tag
@@ -210,8 +203,8 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("about", about_command))
     app.add_handler(CommandHandler("custom", custom_command))
+    
     # --- Tambahkan handler baru untuk perintah /jadwal ---
-
     app.add_handler(CommandHandler("jadwal", jadwal_command))
 
     # Message handler for text messages (excluding commands)
