@@ -29,10 +29,10 @@ def get_today_schedule() -> str:
     # Contoh jadwal mata kuliah Anda
     # Anda bisa menyimpan ini di database, file JSON, atau di sini langsung
     schedules = {
-        0: "Senin: Struktur Data (08:00 - 10:00), Basis Data (10:00 - 12:00)", # Senin
-        1: "Selasa: Pemrograman Web (09:00 - 11:00), Jaringan Komputer (13:00 - 15:00)", # Selasa
-        2: "Rabu: Kecerdasan Buatan (08:00 - 10:00), Interaksi Manusia Komputer (10:00 - 12:00)", # Rabu
-        3: "Kamis: Keamanan Informasi (13:00 - 15:00), Algoritma (15:00 - 17:00)", # Kamis
+        0: "Senin: Struktur Data (08:00 - 10:00) \nBasis Data (10:00 - 12:00)", # Senin
+        1: "Selasa: Pemrograman Web (09:00 - 11:00) \nJaringan Komputer (13:00 - 15:00)", # Selasa
+        2: "Rabu: Kecerdasan Buatan (08:00 - 10:00) \nInteraksi Manusia Komputer (10:00 - 12:00)", # Rabu
+        3: "Kamis: Keamanan Informasi (13:00 - 15:00) \nAlgoritma (15:00 - 17:00)", # Kamis
         4: "Jumat: Proyek Akhir (09:00 - 12:00)", # Jumat
         # 5 (Sabtu) dan 6 (Minggu) tidak ada dalam dictionary karena kosong/free
     }

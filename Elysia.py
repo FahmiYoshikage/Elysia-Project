@@ -5,6 +5,8 @@ import os
 from dotenv import load_dotenv
 import re # Import modul regex
 import datetime # Import modul datetime untuk tanggal dan waktu
+import time
+import schedule # Pastikan modul ini sudah diimpor di awal file
 
 # Load environment variables from .env file
 load_dotenv()
@@ -193,18 +195,27 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "Oh dear, Darling! It seems something went awry on my end. Please forgive me and try again later! 💖"
         )
 
-# --- Main Bot Logic ---
+# --- FUNGSI BARU UNTUK MENGIRIM JADWAL ---
+async def send_daily_schedule(context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Ganti 'CHAT_ID_ANDA' dengan ID chat target
+    # Anda bisa mendapatkan ID ini dengan mengirim pesan ke @userinfobot atau sejenisnya
+    chat_id = "CHAT_ID" 
+    schedule_message = get_schedule()
+    await context.bot.send_message(chat_id=chat_id, text=schedule_message)
 
+# --- Main Bot Logic ---
 if __name__ == "__main__":
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token(TOKEN).concurrent_updates(True).build()
+
+    # Jadwal tugas
+    app.job_queue.run_daily(send_daily_schedule, time=datetime.time(hour=0, minute=0), name="Daily Schedule Sender")
 
     # Command handlers
+    # ... (handlers Anda yang sudah ada)
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("about", about_command))
     app.add_handler(CommandHandler("custom", custom_command))
-    
-    # --- Tambahkan handler baru untuk perintah /jadwal ---
     app.add_handler(CommandHandler("jadwal", jadwal_command))
 
     # Message handler for text messages (excluding commands)
