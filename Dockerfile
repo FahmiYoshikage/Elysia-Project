@@ -1,19 +1,18 @@
-# Use a slim Python image for smaller size
-FROM python:3.10-slim-buster
+# 1. Mulai dari image Python resmi
+FROM python:3.14-slim
 
-# Set the working directory in the container
+# 2. Set folder kerja di dalam container
 WORKDIR /app
 
-# Copy the requirements.txt file (we'll create this next)
+# 3. Salin file requirements Anda (Anda bisa buat dari pip list)
+# (Jalankan "pip freeze > requirements.txt" dulu di terminal Anda)
 COPY requirements.txt .
 
-# Install dependencies
+# 4. Install semua dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your application code
+# 5. Salin sisa kode proyek Anda ke dalam container
 COPY . .
 
-# Command to run the application
-# We'll use a wrapper script or entrypoint for running,
-# but for now, this is the basic command.
+# 6. Perintah untuk menjalankan aplikasi Anda saat container start
 CMD ["python", "Elysia-gmn.py"]
