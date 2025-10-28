@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    app:
+        # Build dari Dockerfile di folder ini ('.')
+        build: .
+
+        # Beri nama image yang di-build
+        image: elysia-project
+
+        # Sama seperti --name elysia-app
+        container_name: elysia-app
+
+        # Sama seperti --restart always
+        restart: always
