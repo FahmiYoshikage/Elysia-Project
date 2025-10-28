@@ -83,7 +83,7 @@ async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 async def get_llm_response(prompt: str) -> str:
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
         full_prompt_with_persona = (
             f"You are Elysia from Honkai Impact 3rd. You are a charming, elegant, and slightly playful AI. "
