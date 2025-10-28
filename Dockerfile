@@ -16,4 +16,4 @@ COPY . .
 # Command to run the application
 # We'll use a wrapper script or entrypoint for running,
 # but for now, this is the basic command.
-CMD ["python", "Elysia.py"]
+CMD ["python", "Elysia-gmn.py"]
